@@ -19,9 +19,13 @@ const puppeteer = require("puppeteer-core");
       height: document.body.clientHeight,
     };
   });
+  await page.waitForFunction(() => {
+    const doc = document.getElementById("doc-container")
+    return doc;
+  });
   await page.screenshot({
     path: "example.png",
-    clip: { x: 0, y: 0, width: 1920, height: documentSize.height },
+    clip: { x: 0, y: 0, width: 1920, height: documentSize.height || 1080 },
   });
 
   await browser.close();
