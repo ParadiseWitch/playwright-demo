@@ -1,8 +1,8 @@
 import { Browser, chromium, ElementHandle, Page } from 'playwright';
-import Log from "../utils/log"
-import download from '../utils/download';
-import FileUtil from '../utils/FileUtil';
-import to, { toRet } from '../utils/to';
+import Log from "./utils/log"
+import download from './utils/download';
+import FileUtil from './utils/FileUtil';
+import to, { toRet } from './utils/to';
 
 
 interface Chapter {
@@ -28,16 +28,20 @@ interface Chapter {
     //     // headless: true,
     //   }
     // );
-    browser = await chromium.launch({ headless: false, slowMo: 100});
-    // browser = await chromium.launch();
+    // browser = await chromium.launch({ headless: false, slowMo: 100});
+    browser = await chromium.launch();
     const page = await browser.newPage()
     page.setDefaultNavigationTimeout(30000)
-    const navigationPromise = page.waitForNavigation()
-    // await navigationPromise;
-    await page.goto(targetUrl, {
-      waitUntil: "load",
-      timeout: 30000
-    });
+    // await page.waitForNavigation();
+    try {
+      await page.goto(targetUrl, {
+        waitUntil: "load",
+        timeout: 30000
+      });
+    } catch (e) { 
+      await Log.error(`请求超时！网站可能暂时无法访问！${targetUrl} `);
+      throw e;
+    }
     await page.setViewportSize({ width: 1920, height: 1080 })
 
     chapters = (await page.$$eval<Chapter[], HTMLElement>(

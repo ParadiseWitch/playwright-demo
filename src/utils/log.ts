@@ -13,13 +13,14 @@ export default class Log {
     Log.writeLogFile("debug", ...contents);
     console.log(chalk.rgb(83, 166, 121).bold.bgRgb(40, 44, 52)(contents.join('\n')));
   }
-  public static error(...contents: any[]) {
+  public static async error(...contents: any[]) {
     const newContents =  contents.map(item => {
       if (item instanceof Error) {
         return item.message + '\n' + item.stack;
       }
+      return item;
     })
-    Log.writeLogFile("error", ...newContents);
+    await Log.writeLogFile("error", ...newContents);
     console.log(chalk.rgb(218, 106, 117).bold.bgRgb(40, 44, 52)(newContents.join('\n')));
   }
   public static warn(...contents: string[]) {
