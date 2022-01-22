@@ -5,7 +5,7 @@ const fs = require("fs");
 
 // https://mirror77.mangafuna.xyz:12001/comic/hydxjxrwgb/94821/e0e9964c-c608-11e8-879b-024352452ce0.jpg!kb_w_read_large
 
-const download = async (src, name) => {
+const download = async (src: string, name: string) => {
   axios({
     method: 'get',
     url: src,
@@ -16,6 +16,9 @@ const download = async (src, name) => {
     })
   }).then(res => {
     res.data.pipe(fs.createWriteStream(name));
-  }).catch(err => Log.error(`${src} 文件下载失败!\n${err}`));
+  }).catch(err => {
+    Log.error(`文件下载失败: ${src}\n${err}`)
+  });
 }
-export default download;
+
+export { download };

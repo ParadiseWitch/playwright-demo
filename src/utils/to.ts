@@ -22,12 +22,15 @@ export default async function to<R>(promise: Promise<R>): Promise<toType<R>> {
 /**
  * 快速检查、记录报错
  * @param promise 
+ * @param e 错误提示
+ * @param eFn 错误回调
  * @returns 
  */
-export const toRet = async <R>(promise: Promise<R>): Promise<R> => {
+export const toRet = async <R>(promise: Promise<R>, e?: Error | string, eFn?: () => {}): Promise<R> => {
   const [err, ret]: toType<R> = await to(promise);
   if (err) {
-    Log.error(err)
+    Log.error(e, err)
+    eFn && eFn();
   }
   return ret;
 }
